@@ -15,6 +15,18 @@ public class Usuario {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    private String nombre;
+
+    @Column(nullable = false)
+    private String apellido;
+
+    @Column(nullable = false)
+    private String email;
+
+    @Column(nullable = false)
+    private String direccion;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "usuario_roles",
@@ -55,4 +67,39 @@ public class Usuario {
     public void setRoles(Set<Rol> roles) {
         this.roles = roles;
     }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    // Método auxiliar para que tu prueba "testValidarUsuario_DatosCompletos_Exitoso" funcione sin problemas
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+    
+
 }
