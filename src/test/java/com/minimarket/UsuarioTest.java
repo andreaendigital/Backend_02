@@ -66,9 +66,58 @@ public class UsuarioTest {
         assertTrue(usuario.getRoles().stream().anyMatch(role -> role.getNombre().equals("ADMIN")));
     }
 
+    @Test
+    public void testValidarUsuario_DatosCompletos_Exitoso() {
+        // Arrange (Preparamos un usuario con TODOS los datos que exige la tarea)
+        Usuario usuario = new Usuario();
+        usuario.setUsername("juanperez");
+        usuario.setPassword("123456");
+  
+        // Aquí agregamos los campos que  pide la guía 
+        usuario.setNombre("Juan");
+        usuario.setApellido("Pérez");
+        usuario.setEmail("juan.perez@minimarket.cl");
+        usuario.setDireccion("Av. Concha y Toro 1234, Puente Alto");
 
+        // Act & Assert (Verificamos que ninguno de los datos requeridos sea nulo o esté vacío)
+        assertNotNull(usuario.getNombre(), "El nombre es obligatorio");
+        assertNotNull(usuario.getApellido(), "El apellido es obligatorio");
+        assertNotNull(usuario.getEmail(), "El email es obligatorio");
+        assertNotNull(usuario.getDireccion(), "La dirección es obligatoria");
+        
+        assertFalse(usuario.getEmail().isEmpty());
+    }
 
+    @Test
+    public void testAccesoUsuario_ConRolAdmin_PermitirOperacion() {
+        // 1. Arrange: Creamos un usuario con el rol autorizado "ADMIN"
+        Usuario usuarioAdmin = new Usuario();
+        usuarioAdmin.setUsername("administrador1");
+        Rol rolAutorizado = new Rol("ADMIN"); 
+        usuarioAdmin.setRoles(Set.of(rolAutorizado));
 
+        // 2. Act: Evaluamos si el sistema detecta que tiene el permiso
+        boolean tieneAcceso = usuarioAdmin.getRoles().stream()
+                .anyMatch(rol -> rol.getNombre().equals("ADMIN"));
 
-    
+        // 3. Assert: Afirmamos que el resultado SÍ debe ser verdadero (true)
+        assertTrue(tieneAcceso, "El administrador debería tener acceso permitido.");
+    }
+
+    @Test
+    public void testAccesoUsuario_ConRolUser_DenegarOperacionCritica() {
+        // 1. Arrange: Creamos otro usuario pero solo con rol "USER" (no es administrador)
+        Usuario usuarioComun = new Usuario();
+        usuarioComun.setUsername("clienteNormal");
+        Rol rolNoAutorizado = new Rol("USER"); 
+        usuarioComun.setRoles(Set.of(rolNoAutorizado));
+
+        // 2. Act: Evaluamos si cumple con el rol "ADMIN" requerido para la venta
+        boolean tieneAccesoAdmin = usuarioComun.getRoles().stream()
+                .anyMatch(rol -> rol.getNombre().equals("ADMIN"));
+
+        // 3. Assert: Afirmamos que el resultado DEBE SER FALSO (false). El sistema debe bloquearlo.
+        assertFalse(tieneAccesoAdmin, "Un usuario común NO debería tener acceso a operaciones de administrador.");
+    }
+
 }
