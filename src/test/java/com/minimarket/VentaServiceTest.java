@@ -5,7 +5,6 @@ import com.minimarket.entity.Usuario;
 import com.minimarket.entity.Venta;
 import com.minimarket.repository.VentaRepository;
 import com.minimarket.repository.ProductoRepository;
-import com.minimarket.service.VentaService;
 import com.minimarket.service.impl.VentaServiceImpl;
 
 import org.junit.jupiter.api.BeforeEach;
